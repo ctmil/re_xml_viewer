@@ -11,10 +11,11 @@ export class AppComponent {
   title = 'XML-viewer';
   treeData: any;
 
-  constructor() {console.log(d3); }
+  constructor() {}
 
   public loadXML(): void {
     let xhttp: any;
+    let childs: any = [];
 
     if (window.XMLHttpRequest) {
       xhttp = new XMLHttpRequest();
@@ -31,15 +32,35 @@ export class AppComponent {
       if (item.getElementsByTagName('CONFIGURADO')[0]) {
         const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
         console.log(item.getAttribute('ID'));
+        let c_carac: any = [];
         for (const carac of caracs) {
           console.log('Caracteristica:');
-          if (carac.getAttribute('CODIGO')) {
-            console.log(carac.getAttribute('CODIGO'));
-          }
-          if (carac.getAttribute('RESPOSTA')) {
-            console.log(carac.getAttribute('RESPOSTA'));
-          }
+          console.log(carac.getAttribute('CODIGO'));
+          console.log(carac.getAttribute('RESPOSTA'));
+          c_carac.push(
+            {
+              name: 'CARAC.',
+              parent: item.getAttribute('ID'),
+              children: [
+                {
+                  name: carac.getAttribute('CODIGO'),
+                  parent: 'CARAC.',
+                  children: []
+                },
+                {
+                  name: carac.getAttribute('RESPOSTA'),
+                  parent: 'CARAC.',
+                  children: []
+                }
+              ]
+            }
+          );
         }
+        childs.push({
+          name: item.getAttribute('ID'),
+          parent: 'Archivo Padre',
+          children: c_carac
+        });
         console.log('- - - - - - - - - - - - -');
       }
     }
@@ -50,18 +71,18 @@ export class AppComponent {
       {
         name: 'Archivo Padre',
         parent: 'null',
-        children: []
+        children: childs
       }
     ];
 
-    // this.drawGraph();
+    this.drawGraph();
   }
 
   public drawGraph(): void {
     // ************** Generate the tree diagram	 *****************
     const margin = {top: 40, right: 120, bottom: 20, left: 120};
-    const width = 960 - margin.right - margin.left;
-    const height = 500 - margin.top - margin.bottom;
+    const width = 1200 - margin.right - margin.left;
+    const height = 1600 - margin.top - margin.bottom;
 
     let i = 0;
     const duration = 750;
@@ -83,7 +104,7 @@ export class AppComponent {
 
     update(root);
 
-    d3.select(self.frameElement).style('height', '500px');
+    d3.select(self.frameElement).style('height', '1600px');
 
     function update(source: any) {
       // Compute the new tree layout.
@@ -91,7 +112,7 @@ export class AppComponent {
       const links = tree.links(nodes);
 
       // Normalize for fixed-depth.
-      nodes.forEach((d: any) => { d.y = d.depth * 180; });
+      nodes.forEach((d: any) => { d.y = d.depth * 100; });
 
       // Update the nodes…
       const node = svg.selectAll('g.node')
