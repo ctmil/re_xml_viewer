@@ -1,3 +1,4 @@
 <div>
-  <button class="btn btn-primary" (click)="loadXML()" type="button">Cargar XML</button>
+  <!--button class="btn btn-primary" (click)="loadXML()" type="button">Cargar XML</button-->
+  <input type="file" id="file" name="file" (change)="readXML($event)">
 </div>

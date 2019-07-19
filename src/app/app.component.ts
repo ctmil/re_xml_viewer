@@ -13,19 +13,22 @@ export class AppComponent {
 
   constructor() {}
 
-  public loadXML(): void {
-    let xhttp: any;
+  public readXML(fileInput: any): void {
+    let file = fileInput.target.files[0];
+    if (file) {
+      let reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (evt: any) => {
+        this.loadXML(evt.target.result);
+      }
+    }
+  }
+
+  public loadXML(file: any): void {
+    let parser: any = new DOMParser();
     let childs: any = [];
 
-    if (window.XMLHttpRequest) {
-      xhttp = new XMLHttpRequest();
-    }
-
-    xhttp.overrideMimeType('text/xml');
-
-    xhttp.open('GET', './assets/archivo.xml', false);
-    xhttp.send(null);
-    const xmlDoc = xhttp.responseXML;
+    const xmlDoc = parser.parseFromString(file,"text/xml");
     const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
 
     for (const item of items) {
@@ -65,7 +68,7 @@ export class AppComponent {
       }
     }
 
-    console.log('- - - - End read - - - -');
+    console.log('- - - - End Read - - - -');
 
     this.treeData = [
       {
