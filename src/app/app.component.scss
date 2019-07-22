@@ -35,8 +35,12 @@
 /*D3*/
 .node circle {
     fill: #fff;
-    stroke: steelblue;
+    stroke: firebrick;
     stroke-width: 3px;
+}
+
+circle:hover {
+    cursor:pointer;
 }
 
 .node text { 

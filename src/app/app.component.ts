@@ -121,7 +121,7 @@ export class AppComponent {
 
       nodeEnter.append('circle')
       .attr('r', 1e-6)
-      .style('fill', (d: any) => d._children ? 'lightsteelblue' : '#fff');
+      .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeEnter.append('text')
       .attr('x', (d: any) => d.children || d._children ? -13 : 13)
@@ -137,9 +137,9 @@ export class AppComponent {
 
       nodeUpdate.select('circle')
       .attr('r', 10)
-      .style('stroke', 'steelblue')
+      .style('stroke', 'firebrick')
       .style('stroke-width', '3px')
-      .style('fill', (d: any) => d._children ? 'lightsteelblue' : '#fff');
+      .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeUpdate.select('text')
       .style('font', '12px sans-serif')
@@ -201,7 +201,9 @@ export class AppComponent {
       } else {
         d.children = d._children;
         d._children = null;
-        alert("Codigo: "+d.codigo+", Resposta: "+d.resposta);
+        if (d.codigo || d.resposta) {
+          alert('Codigo: ' + d.codigo + '\nResposta: ' + d.resposta);
+        }
       }
       update(d);
     }
