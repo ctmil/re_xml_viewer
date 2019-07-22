@@ -95,7 +95,9 @@ export class AppComponent {
     const diagonal = d3.svg.diagonal()
       .projection((d: any) => [d.y, d.x]);
 
-    const svg = d3.select('body').append('svg')
+    d3.select('#d3graph').html('');
+
+    const svg = d3.select('#d3graph').append('svg')
       .attr('width', width + margin.right + margin.left)
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
