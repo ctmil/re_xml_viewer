@@ -44,18 +44,8 @@ export class AppComponent {
             {
               name: 'CARAC.',
               parent: item.getAttribute('ID'),
-              children: [
-                {
-                  name: carac.getAttribute('CODIGO'),
-                  parent: 'CARAC.',
-                  children: []
-                },
-                {
-                  name: carac.getAttribute('RESPOSTA'),
-                  parent: 'CARAC.',
-                  children: []
-                }
-              ]
+              codigo: carac.getAttribute('CODIGO'),
+	      resposta: carac.getAttribute('RESPOSTA')
             }
           );
         }
@@ -206,11 +196,12 @@ export class AppComponent {
     // Toggle children on click.
     function click(d: any) {
       if (d.children) {
-      d._children = d.children;
-      d.children = null;
+        d._children = d.children;
+        d.children = null;
       } else {
-      d.children = d._children;
-      d._children = null;
+        d.children = d._children;
+        d._children = null;
+        alert("Codigo: "+d.codigo+", Resposta: "+d.resposta);
       }
       update(d);
     }
