@@ -32,6 +32,8 @@ export class AppComponent {
     const parser: any = new DOMParser();
     const childs: any = [];
 
+    let contCar = 0;
+
     const xmlDoc = parser.parseFromString(file, 'text/xml');
     const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
 
@@ -52,34 +54,36 @@ export class AppComponent {
               resposta: carac.getAttribute('RESPOSTA')
             }
           );
+          contCar++;
         }
         childs.push({
           name: item.getAttribute('ID'),
-          parent: 'Archivo Padre',
+          parent: 'ROOT',
           children: c_carac
         });
         console.log('- - - - - - - - - - - - -');
       }
     }
 
+    console.log('Caract: ' + contCar);
     console.log('- - - - End Read - - - -');
 
     this.treeData = [
       {
-        name: 'Archivo Padre',
+        name: 'ROOT',
         parent: 'null',
         children: childs
       }
     ];
 
-    this.drawGraph();
+    this.drawGraph(contCar * 34);
   }
 
-  public drawGraph(): void {
+  public drawGraph(h: number): void {
     // ************** Generate the tree diagram	 *****************
     const margin = {top: 40, right: 120, bottom: 20, left: 120};
     const width = 1200 - margin.right - margin.left;
-    const height = 6000 - margin.top - margin.bottom;
+    const height = h - margin.top - margin.bottom;
 
     let i = 0;
     const duration = 750;
@@ -103,7 +107,7 @@ export class AppComponent {
 
     update(root);
 
-    d3.select(self.frameElement).style('height', '6000px');
+    d3.select(self.frameElement).style('height', String(h) + 'px');
 
     function update(source: any) {
       // Compute the new tree layout.
