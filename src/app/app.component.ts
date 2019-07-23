@@ -14,21 +14,21 @@ export class AppComponent {
   constructor() {}
 
   public readXML(fileInput: any): void {
-    let file = fileInput.target.files[0];
+    const file = fileInput.target.files[0];
     if (file) {
-      let reader = new FileReader();
-      reader.readAsText(file, "UTF-8");
+      const reader = new FileReader();
+      reader.readAsText(file, 'UTF-8');
       reader.onload = (evt: any) => {
         this.loadXML(evt.target.result);
-      }
+      };
     }
   }
 
   public loadXML(file: any): void {
-    let parser: any = new DOMParser();
-    let childs: any = [];
+    const parser: any = new DOMParser();
+    const childs: any = [];
 
-    const xmlDoc = parser.parseFromString(file,"text/xml");
+    const xmlDoc = parser.parseFromString(file, 'text/xml');
     const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
 
     for (const item of items) {
@@ -45,7 +45,7 @@ export class AppComponent {
               name: 'CARAC.',
               parent: item.getAttribute('ID'),
               codigo: carac.getAttribute('CODIGO'),
-	      resposta: carac.getAttribute('RESPOSTA')
+              resposta: carac.getAttribute('RESPOSTA')
             }
           );
         }
@@ -75,7 +75,7 @@ export class AppComponent {
     // ************** Generate the tree diagram	 *****************
     const margin = {top: 40, right: 120, bottom: 20, left: 120};
     const width = 1200 - margin.right - margin.left;
-    const height = 1600 - margin.top - margin.bottom;
+    const height = 6000 - margin.top - margin.bottom;
 
     let i = 0;
     const duration = 750;
@@ -94,12 +94,12 @@ export class AppComponent {
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     const root = this.treeData[0];
-    root.x0 = height / 2;
+    root.x0 = 0;
     root.y0 = 0;
 
     update(root);
 
-    d3.select(self.frameElement).style('height', '1600px');
+    d3.select(self.frameElement).style('height', '6000px');
 
     function update(source: any) {
       // Compute the new tree layout.
@@ -119,8 +119,9 @@ export class AppComponent {
       .attr('transform', (d: any) => 'translate(' + source.y0 + ',' + source.x0 + ')')
       .on('click', click);
 
-      nodeEnter.append('circle')
-      .attr('r', 1e-6)
+      nodeEnter.append('rect')
+      .attr('width', 20)
+      .attr('height', 20)
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeEnter.append('text')
@@ -135,10 +136,13 @@ export class AppComponent {
       .duration(duration)
       .attr('transform', (d: any) => 'translate(' + d.y + ',' + d.x + ')');
 
-      nodeUpdate.select('circle')
-      .attr('r', 10)
+      nodeUpdate.select('rect')
+      .attr('width', 20)
+      .attr('height', 20)
+      .attr('x', -10)
+      .attr('y', -10)
       .style('stroke', 'firebrick')
-      .style('stroke-width', '3px')
+      .style('stroke-width', '2px')
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeUpdate.select('text')
@@ -151,8 +155,9 @@ export class AppComponent {
       .attr('transform', (d: any) => 'translate(' + source.y + ',' + source.x + ')')
       .remove();
 
-      nodeExit.select('circle')
-      .attr('r', 1e-6);
+      nodeExit.select('rect')
+      .attr('width', 20)
+      .attr('height', 20);
 
       nodeExit.select('text')
       .style('fill-opacity', 1e-6);

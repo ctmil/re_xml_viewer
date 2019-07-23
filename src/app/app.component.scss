@@ -33,13 +33,13 @@
 }
 
 /*D3*/
-.node circle {
+.node rect {
     fill: #fff;
     stroke: firebrick;
     stroke-width: 3px;
 }
 
-circle:hover {
+rect:hover {
     cursor:pointer;
 }
 
