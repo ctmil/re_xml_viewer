@@ -13,6 +13,10 @@ export class AppComponent {
 
   constructor() {}
 
+  public startReading(): void {
+    document.getElementById('file').click();
+  }
+
   public readXML(fileInput: any): void {
     const file = fileInput.target.files[0];
     if (file) {

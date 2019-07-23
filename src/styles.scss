@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$XML-viewer-primary: mat-palette($mat-red, 900);
+$XML-viewer-accent: mat-palette($mat-indigo, A200, A100, A400);
+$XML-viewer-warn: mat-palette($mat-orange);
+
+$XML-viewer-theme: mat-light-theme($XML-viewer-primary, $XML-viewer-accent, $XML-viewer-warn);
+
+@include angular-material-theme($XML-viewer-theme);
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
