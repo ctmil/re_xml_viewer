@@ -35,48 +35,53 @@ export class AppComponent {
     let contCar = 0;
 
     const xmlDoc = parser.parseFromString(file, 'text/xml');
-    const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
 
-    for (const item of items) {
-      if (item.getElementsByTagName('CONFIGURADO')[0]) {
-        const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
-        console.log(item.getAttribute('ID'));
-        let c_carac: any = [];
-        for (const carac of caracs) {
-          console.log('Caracteristica:');
-          console.log(carac.getAttribute('CODIGO'));
-          console.log(carac.getAttribute('RESPOSTA'));
-          c_carac.push(
-            {
-              name: 'CARAC.',
-              parent: item.getAttribute('ID'),
-              codigo: carac.getAttribute('CODIGO'),
-              resposta: carac.getAttribute('RESPOSTA')
-            }
-          );
-          contCar++;
+    if (xmlDoc.getElementsByTagName('XML_BUILDER')) {
+      const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
+
+      for (const item of items) {
+        if (item.getElementsByTagName('CONFIGURADO')[0]) {
+          const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
+          console.log(item.getAttribute('ID'));
+          let c_carac: any = [];
+          for (const carac of caracs) {
+            console.log('Caracteristica:');
+            console.log(carac.getAttribute('CODIGO'));
+            console.log(carac.getAttribute('RESPOSTA'));
+            c_carac.push(
+              {
+                name: 'CARAC.',
+                parent: item.getAttribute('ID'),
+                codigo: carac.getAttribute('CODIGO'),
+                resposta: carac.getAttribute('RESPOSTA')
+              }
+            );
+            contCar++;
+          }
+          childs.push({
+            name: item.getAttribute('ID'),
+            parent: 'ROOT',
+            children: c_carac
+          });
+          console.log('- - - - - - - - - - - - -');
         }
-        childs.push({
-          name: item.getAttribute('ID'),
-          parent: 'ROOT',
-          children: c_carac
-        });
-        console.log('- - - - - - - - - - - - -');
       }
+
+      console.log('Caract: ' + contCar);
+      console.log('- - - - End Read - - - -');
+
+      this.treeData = [
+        {
+          name: 'ROOT',
+          parent: 'null',
+          children: childs
+        }
+      ];
+
+      this.drawGraph(contCar * 34);
+    } else {
+      alert('XML Inválido - Consulte al Administrador');
     }
-
-    console.log('Caract: ' + contCar);
-    console.log('- - - - End Read - - - -');
-
-    this.treeData = [
-      {
-        name: 'ROOT',
-        parent: 'null',
-        children: childs
-      }
-    ];
-
-    this.drawGraph(contCar * 34);
   }
 
   public drawGraph(h: number): void {
