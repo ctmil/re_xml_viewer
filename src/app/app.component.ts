@@ -43,27 +43,55 @@ export class AppComponent {
         if (item.getElementsByTagName('CONFIGURADO')[0]) {
           const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
           console.log(item.getAttribute('ID'));
-          let c_carac: any = [];
+
+	  if (item.getElementsByTagName('ESTRUTURA')) {
+		console.log('ESTRUCTURA');
+	  }
+
+          let resposta = '';
           for (const carac of caracs) {
-            console.log('Caracteristica:');
-            console.log(carac.getAttribute('CODIGO'));
-            console.log(carac.getAttribute('RESPOSTA'));
-            c_carac.push(
-              {
-                name: 'CARAC.',
-                parent: item.getAttribute('ID'),
-                codigo: carac.getAttribute('CODIGO'),
-                resposta: carac.getAttribute('RESPOSTA')
-              }
-            );
-            contCar++;
+            if (carac.getAttribute('CODIGO') == 'CODIGOAMBIENTEDEFAULT') {
+		resposta += 'CODIGOAMBIENTEDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n'
+	    } else if (carac.getAttribute('CODIGO') == 'CODIGOARTICULO') {
+		resposta += 'CODIGOARTICULO: ' + carac.getAttribute('RESPOSTA') + '\n'
+	    } else if (carac.getAttribute('CODIGO') == 'CODIGOCOLOR') { 
+		resposta += 'CODIGOCOLOR: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGODISTRIBUCION') { 
+		resposta += 'CODIGODISTRIBUCION: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOFAMILIA') { 
+		resposta += 'CODIGOFAMILIA: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOHERRAJEPRECIO') { 
+		resposta += 'CODIGOHERRAJEPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOLINEA') { 
+		resposta += 'CODIGOLINEA: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOMATERIAL') { 
+		resposta += 'CODIGOMATERIAL: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOMODELO') { 
+		resposta += 'CODIGOMODELO: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOMODOCONSTRUCTIVO') { 
+		resposta += 'CODIGOMODOCONSTRUCTIVO: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOMODOSUSTENTACION') { 
+		resposta += 'CODIGOMODOSUSTENTACION: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOPRECIO') { 
+		resposta += 'CODIGOPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOTIPOENTIDAD') { 
+		resposta += 'CODIGOTIPOENTIDAD: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOTIPOMUEBLE') { 
+		resposta += 'CODIGOTIPOMUEBLE: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'CODIGOUBICACIONVERTICALDEFAULT') { 
+		resposta += 'CODIGOUBICACIONVERTICALDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n'
+            } else if (carac.getAttribute('CODIGO') == 'DESCRIPCIONCOMPLETA') { 
+		resposta += 'DESCRIPCIONCOMPLETA: ' + carac.getAttribute('RESPOSTA') + '\n'
+            }
           }
           childs.push({
             name: item.getAttribute('ID'),
             parent: 'ROOT',
-            children: c_carac
+            children: [],
+	    resposta: resposta
           });
           console.log('- - - - - - - - - - - - -');
+	  contCar++;
         }
       }
 
@@ -220,7 +248,7 @@ export class AppComponent {
         d.children = d._children;
         d._children = null;
         if (d.codigo || d.resposta) {
-          alert('Codigo: ' + d.codigo + '\nResposta: ' + d.resposta);
+          alert(d.resposta);
         }
       }
       update(d);
