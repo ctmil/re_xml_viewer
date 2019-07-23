@@ -4,6 +4,7 @@
       <mat-toolbar-row>
         <span>RE-XML Viewer</span>
         <input type="file" id="file" name="file" (change)="readXML($event)" />
+        <span class="spacer"></span>
         <button mat-raised-button color="primary" (click)="startReading()">
           Cargar XML
         </button>
@@ -11,5 +12,19 @@
     </mat-toolbar>
   </nav>
 
-  <div id="d3graph"></div>
+  <div class="container">
+    <div id="d3graph">
+      <div id="precontent">
+        - Aquí se renderizará el gráfico -
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <mat-toolbar color="primary" class="shadow-inset">
+      <mat-toolbar-row>
+        <span></span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </footer>
 </div>
