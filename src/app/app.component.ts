@@ -87,7 +87,8 @@ export class AppComponent {
   public drawGraph(h: number): void {
     // ************** Generate the tree diagram	 *****************
     const margin = {top: 40, right: 120, bottom: 20, left: 120};
-    const width = 1200 - margin.right - margin.left;
+    const width = (window.innerWidth - 20) - margin.right - margin.left;
+    console.log(width);
     const height = h - margin.top - margin.bottom;
 
     let i = 0;
@@ -95,8 +96,7 @@ export class AppComponent {
 
     const tree = d3.layout.tree().size([height, width]);
 
-    const diagonal = d3.svg.diagonal()
-      .projection((d: any) => [d.y, d.x]);
+    const diagonal = d3.svg.diagonal().projection((d: any) => [d.y, d.x]);
 
     d3.select('#d3graph').html('');
 
