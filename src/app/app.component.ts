@@ -35,10 +35,53 @@ export class AppComponent {
     for (const item of s.getElementsByTagName('ITEM')) {
       this.contCar++;
 
+      let resposta = '';
+
+      if (item.getElementsByTagName('CONFIGURADO')[0]) {
+        const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
+
+        for (const carac of caracs) {
+          if (carac.getAttribute('CODIGO') === 'CODIGOAMBIENTEDEFAULT') {
+            resposta += 'CODIGOAMBIENTEDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOARTICULO') {
+            resposta += 'CODIGOARTICULO: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOCOLOR') {
+            resposta += 'CODIGOCOLOR: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGODISTRIBUCION') {
+            resposta += 'CODIGODISTRIBUCION: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOFAMILIA') {
+            resposta += 'CODIGOFAMILIA: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOHERRAJEPRECIO') {
+            resposta += 'CODIGOHERRAJEPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOLINEA') {
+            resposta += 'CODIGOLINEA: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOMATERIAL') {
+            resposta += 'CODIGOMATERIAL: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOMODELO') {
+            resposta += 'CODIGOMODELO: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOMODOCONSTRUCTIVO') {
+            resposta += 'CODIGOMODOCONSTRUCTIVO: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOMODOSUSTENTACION') {
+            resposta += 'CODIGOMODOSUSTENTACION: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOPRECIO') {
+            resposta += 'CODIGOPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
+            resposta += 'CODIGOTIPOENTIDAD: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOMUEBLE') {
+            resposta += 'CODIGOTIPOMUEBLE: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'CODIGOUBICACIONVERTICALDEFAULT') {
+            resposta += 'CODIGOUBICACIONVERTICALDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n';
+          } else if (carac.getAttribute('CODIGO') === 'DESCRIPCIONCOMPLETA') {
+            resposta += 'DESCRIPCIONCOMPLETA: ' + carac.getAttribute('RESPOSTA') + '\n';
+          }
+        }
+      }
+
       const nc = {
         name: item.getAttribute('ID'),
         parent: s.parentNode.getAttribute('ID'),
-        children: []
+        children: [],
+        resposta
       };
 
       c.children.push(nc);
