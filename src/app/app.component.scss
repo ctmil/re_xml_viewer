@@ -32,35 +32,6 @@
     transition: all 0.5s;
 }
 
-/*D3*/
-.node rect {
-    fill: #fff;
-    stroke: firebrick;
-    stroke-width: 3px;
-}
-
-rect:hover {
-    cursor:pointer;
-}
-
-.node text { 
-    font: 12px sans-serif;
-}
-
-.link {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 2px;
-}
-#precontent {
-    height:80vh;
-    text-align:center;
-    padding:50px;
-}
-#d3graph {
-    min-height:90vh;
-}
-
 /* Nav */
 nav {
     box-shadow: 0 0 5px #888;

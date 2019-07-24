@@ -12,3 +12,47 @@ $XML-viewer-theme: mat-light-theme($XML-viewer-primary, $XML-viewer-accent, $XML
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/*D3*/
+.node rect {
+    fill: #fff;
+    stroke: firebrick;
+    stroke-width: 2px;
+    transition: all 0.5s;
+}
+
+.node:hover rect {
+    cursor: pointer;
+    fill: salmon !important;
+    stroke: firebrick;
+    stroke-width: 4px;
+    transition: all 0.5s;
+}
+
+.node text { 
+    font: 12px sans-serif;
+    opacity:0.85;
+    transition: all 0.5s;
+}
+
+.node:hover text {
+    font-weight:700 !important;
+    font-size:13px;
+    opacity:1;
+    cursor:pointer;
+    transition: all 0.5s;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+}
+#precontent {
+    height:80vh;
+    text-align:center;
+    padding:50px;
+}
+#d3graph {
+    min-height:90vh;
+}

@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 declare var window: any;
 
 export interface DialogData {
+  name: string;
   resposta: string;
 }
 
@@ -251,8 +252,6 @@ export class AppComponent {
       .attr('height', 20)
       .attr('x', -10)
       .attr('y', -10)
-      .style('stroke', 'firebrick')
-      .style('stroke-width', '2px')
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeUpdate.select('text')
@@ -320,20 +319,21 @@ export class AppComponent {
       update(d);
     }
 
+    // tslint:disable-next-line: variable-name
     const this_ = this;
     // Toggle children on oclick.
     function oclick(d: any) {
       d3.event.preventDefault();
       if (d.resposta) {
-        this_.openDialog(d.resposta);
+        this_.openDialog(d.name, d.resposta);
       }
     }
   }
 
-  openDialog(r: string): void {
+  openDialog(n: string, r: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '500px',
-      data: {resposta: r.replace(/\n/g, '<br />')}
+      data: {name: n, resposta: r.replace(/\n/g, '<br />')}
     });
 
     dialogRef.afterClosed().subscribe(result => {

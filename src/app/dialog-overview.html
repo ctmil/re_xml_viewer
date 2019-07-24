@@ -1,7 +1,7 @@
-<h1 mat-dialog-title>Datos</h1>
+<h1 mat-dialog-title>Datos de <b>{{data.name}}</b></h1>
 <div mat-dialog-content>
-    <p [innerHtml]="data.resposta" style="font-size:14px;letter-spacing:0.5px;"></p>
+    <p [innerHtml]="data.resposta" style="font-size:14px;letter-spacing:0.5px;line-height: 18px;"></p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()" cdkFocusInitial>Cerrar</button>
+  <button mat-button color="primary" (click)="onNoClick()" cdkFocusInitial>Cerrar</button>
 </div>
