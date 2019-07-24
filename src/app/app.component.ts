@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as d3 from 'd3';
 declare var window: any;
+
+export interface DialogData {
+  resposta: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -13,7 +18,7 @@ export class AppComponent {
   children: any = [];
   contCar = 0;
 
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   public startReading(): void {
     document.getElementById('file').click();
@@ -42,37 +47,37 @@ export class AppComponent {
 
         for (const carac of caracs) {
           if (carac.getAttribute('CODIGO') === 'CODIGOAMBIENTEDEFAULT') {
-            resposta += 'CODIGOAMBIENTEDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOAMBIENTEDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOARTICULO') {
-            resposta += 'CODIGOARTICULO: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOARTICULO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOCOLOR') {
-            resposta += 'CODIGOCOLOR: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOCOLOR:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGODISTRIBUCION') {
-            resposta += 'CODIGODISTRIBUCION: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGODISTRIBUCION:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOFAMILIA') {
-            resposta += 'CODIGOFAMILIA: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOFAMILIA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOHERRAJEPRECIO') {
-            resposta += 'CODIGOHERRAJEPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOHERRAJEPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOLINEA') {
-            resposta += 'CODIGOLINEA: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOLINEA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOMATERIAL') {
-            resposta += 'CODIGOMATERIAL: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOMATERIAL:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOMODELO') {
-            resposta += 'CODIGOMODELO: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOMODELO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOMODOCONSTRUCTIVO') {
-            resposta += 'CODIGOMODOCONSTRUCTIVO: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOMODOCONSTRUCTIVO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOMODOSUSTENTACION') {
-            resposta += 'CODIGOMODOSUSTENTACION: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOMODOSUSTENTACION:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOPRECIO') {
-            resposta += 'CODIGOPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
-            resposta += 'CODIGOTIPOENTIDAD: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOTIPOENTIDAD:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOMUEBLE') {
-            resposta += 'CODIGOTIPOMUEBLE: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOTIPOMUEBLE:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOUBICACIONVERTICALDEFAULT') {
-            resposta += 'CODIGOUBICACIONVERTICALDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>CODIGOUBICACIONVERTICALDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'DESCRIPCIONCOMPLETA') {
-            resposta += 'DESCRIPCIONCOMPLETA: ' + carac.getAttribute('RESPOSTA') + '\n';
+            resposta += '<b>DESCRIPCIONCOMPLETA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           }
         }
       }
@@ -108,37 +113,37 @@ export class AppComponent {
           let resposta = '';
           for (const carac of caracs) {
             if (carac.getAttribute('CODIGO') === 'CODIGOAMBIENTEDEFAULT') {
-              resposta += 'CODIGOAMBIENTEDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOAMBIENTEDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOARTICULO') {
-              resposta += 'CODIGOARTICULO: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOARTICULO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOCOLOR') {
-              resposta += 'CODIGOCOLOR: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOCOLOR:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGODISTRIBUCION') {
-              resposta += 'CODIGODISTRIBUCION: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGODISTRIBUCION:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOFAMILIA') {
-              resposta += 'CODIGOFAMILIA: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOFAMILIA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOHERRAJEPRECIO') {
-              resposta += 'CODIGOHERRAJEPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOHERRAJEPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOLINEA') {
-              resposta += 'CODIGOLINEA: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOLINEA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOMATERIAL') {
-              resposta += 'CODIGOMATERIAL: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOMATERIAL:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOMODELO') {
-              resposta += 'CODIGOMODELO: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOMODELO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOMODOCONSTRUCTIVO') {
-              resposta += 'CODIGOMODOCONSTRUCTIVO: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOMODOCONSTRUCTIVO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOMODOSUSTENTACION') {
-              resposta += 'CODIGOMODOSUSTENTACION: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOMODOSUSTENTACION:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOPRECIO') {
-              resposta += 'CODIGOPRECIO: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
-              resposta += 'CODIGOTIPOENTIDAD: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOTIPOENTIDAD:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOMUEBLE') {
-              resposta += 'CODIGOTIPOMUEBLE: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOTIPOMUEBLE:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOUBICACIONVERTICALDEFAULT') {
-              resposta += 'CODIGOUBICACIONVERTICALDEFAULT: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>CODIGOUBICACIONVERTICALDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'DESCRIPCIONCOMPLETA') {
-              resposta += 'DESCRIPCIONCOMPLETA: ' + carac.getAttribute('RESPOSTA') + '\n';
+              resposta += '<b>DESCRIPCIONCOMPLETA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             }
           }
           const childs = {
@@ -315,12 +320,41 @@ export class AppComponent {
       update(d);
     }
 
+    const this_ = this;
     // Toggle children on oclick.
     function oclick(d: any) {
       d3.event.preventDefault();
       if (d.resposta) {
-        alert(d.resposta);
+        this_.openDialog(d.resposta);
       }
     }
   }
+
+  openDialog(r: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '500px',
+      data: {resposta: r.replace(/\n/g, '<br />')}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
+}
+
+/* MatDialog */
+
+@Component({
+  selector: 'dialog-overview',
+  templateUrl: 'dialog-overview.html',
+})
+export class DialogComponent {
+
+  constructor(public dialogRef: MatDialogRef<DialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
 }
