@@ -40,6 +40,7 @@ export class AppComponent {
     console.log('New Structure');
     for (const item of s.getElementsByTagName('ITEM')) {
       let resposta = '';
+      let entidad = '';
 
       if (item.getElementsByTagName('CONFIGURADO')[0]) {
         const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
@@ -71,6 +72,7 @@ export class AppComponent {
             resposta += '<b>CODIGOPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
             resposta += '<b>CODIGOTIPOENTIDAD:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
+            entidad = carac.getAttribute('RESPOSTA');
           } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOMUEBLE') {
             resposta += '<b>CODIGOTIPOMUEBLE:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOUBICACIONVERTICALDEFAULT') {
@@ -86,7 +88,8 @@ export class AppComponent {
         name: item.getAttribute('ID'),
         parent: s.parentNode.getAttribute('ID'),
         children: [],
-        resposta
+        resposta,
+        entidad
       };
 
       c.children.push(nc);
@@ -104,7 +107,6 @@ export class AppComponent {
 
     if (xmlDoc.getElementsByTagName('XML_BUILDER')) {
       const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
-      let print = false;
 
       for (const item of items) {
         if (item.getElementsByTagName('CONFIGURADO')[0]) {
@@ -112,6 +114,7 @@ export class AppComponent {
           console.log(item.getAttribute('ID'));
 
           let resposta = '';
+          let entidad = '';
           for (const carac of caracs) {
             if (carac.getAttribute('CODIGO') === 'CODIGOAMBIENTEDEFAULT') {
               resposta += '<b>CODIGOAMBIENTEDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
@@ -139,6 +142,7 @@ export class AppComponent {
               resposta += '<b>CODIGOPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
               resposta += '<b>CODIGOTIPOENTIDAD:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
+              entidad = carac.getAttribute('RESPOSTA');
             } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOMUEBLE') {
               resposta += '<b>CODIGOTIPOMUEBLE:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOUBICACIONVERTICALDEFAULT') {
@@ -149,10 +153,11 @@ export class AppComponent {
           }
 
           const childs = {
-            name: item.getAttribute('ID'),
-            parent: 'ROOT',
-            children: [],
-            resposta
+              name: item.getAttribute('ID'),
+              parent: 'ROOT',
+              children: [],
+              resposta,
+              entidad
           };
 
           this.children.push(childs);
@@ -174,7 +179,6 @@ export class AppComponent {
             children: this.children
           }
         ];
-        console.log(this.treeData);
         this.drawGraph(this.contCar * 34);
       }, 1000);
     } else {
@@ -186,7 +190,6 @@ export class AppComponent {
     // ************** Generate the tree diagram	 *****************
     const margin = {top: 40, right: 120, bottom: 20, left: 120};
     const width = (window.innerWidth - 20) - margin.right - margin.left;
-    console.log(width);
     const height = h - margin.top - margin.bottom;
 
     let i = 0;
@@ -253,11 +256,32 @@ export class AppComponent {
       .attr('height', 20)
       .attr('x', -10)
       .attr('y', -10)
+      .style('stroke', (d: any) => {
+        if (d.entidad) {
+          if (d.entidad === 'PT' || d.entidad === 'SE' || d.entidad === 'INS') {
+            return 'firebrick';
+          } else {
+            return 'rgba(0, 0, 255, 0.5)';
+          }
+        } else {
+          return 'rgba(0, 0, 255, 0.5)';
+        }
+      })
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeUpdate.select('text')
       .style('font', '12px sans-serif')
-      .style('fill-opacity', 1);
+      .style('fill-opacity', (d: any) => {
+        if (d.entidad) {
+          if (d.entidad === 'PT' || d.entidad === 'SE' || d.entidad === 'INS') {
+            return 1;
+          } else {
+            return 0.6;
+          }
+        } else {
+          return 0.6;
+        }
+      });
 
       // Transition exiting nodes to the parent's new position.
       const nodeExit = node.exit().transition()
@@ -332,6 +356,7 @@ export class AppComponent {
   }
 
   openDialog(n: string, r: string): void {
+    // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '500px',
       data: {name: n, resposta: r.replace(/\n/g, '<br />')}
@@ -346,6 +371,7 @@ export class AppComponent {
 /* MatDialog */
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'dialog-overview',
   templateUrl: 'dialog-overview.html',
 })
