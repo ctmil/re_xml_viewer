@@ -42,6 +42,7 @@ export class AppComponent {
       this.contCar++;
 
       let resposta = '';
+      let entidad = '';
 
       if (item.getElementsByTagName('CONFIGURADO')[0]) {
         const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
@@ -73,6 +74,7 @@ export class AppComponent {
             resposta += '<b>CODIGOPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
             resposta += '<b>CODIGOTIPOENTIDAD:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
+            entidad = carac.getAttribute('RESPOSTA');
           } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOMUEBLE') {
             resposta += '<b>CODIGOTIPOMUEBLE:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           } else if (carac.getAttribute('CODIGO') === 'CODIGOUBICACIONVERTICALDEFAULT') {
@@ -87,7 +89,8 @@ export class AppComponent {
         name: item.getAttribute('ID'),
         parent: s.parentNode.getAttribute('ID'),
         children: [],
-        resposta
+        resposta,
+	entidad
       };
 
       c.children.push(nc);
@@ -112,6 +115,7 @@ export class AppComponent {
           console.log(item.getAttribute('ID'));
 
           let resposta = '';
+          let entidad = '';
           for (const carac of caracs) {
             if (carac.getAttribute('CODIGO') === 'CODIGOAMBIENTEDEFAULT') {
               resposta += '<b>CODIGOAMBIENTEDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
@@ -139,6 +143,7 @@ export class AppComponent {
               resposta += '<b>CODIGOPRECIO:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
               resposta += '<b>CODIGOTIPOENTIDAD:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
+              entidad = carac.getAttribute('RESPOSTA');
             } else if (carac.getAttribute('CODIGO') === 'CODIGOTIPOMUEBLE') {
               resposta += '<b>CODIGOTIPOMUEBLE:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             } else if (carac.getAttribute('CODIGO') === 'CODIGOUBICACIONVERTICALDEFAULT') {
@@ -151,7 +156,8 @@ export class AppComponent {
               name: item.getAttribute('ID'),
               parent: 'ROOT',
               children: [],
-              resposta
+              resposta,
+              entidad
           };
 
           this.children.push(childs);
@@ -252,11 +258,12 @@ export class AppComponent {
       .attr('height', 20)
       .attr('x', -10)
       .attr('y', -10)
+      .style('stroke', function (d: any){ if (d.entidad) { if (d.entidad == 'PT' || d.entidad == 'SE' || d.entidad == 'INS') { return 'firebrick'; } else { return 'rgba(0,0,255,0.5)'; } } else { return 'rgba(0,0,255,0.5)'; } } )
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeUpdate.select('text')
       .style('font', '12px sans-serif')
-      .style('fill-opacity', 1);
+      .style('fill-opacity', function (d: any){ if (d.entidad) { if (d.entidad == 'PT' || d.entidad == 'SE' || d.entidad == 'INS') { return 1; } else { return 0.6; } } else { return 0.6; } });
 
       // Transition exiting nodes to the parent's new position.
       const nodeExit = node.exit().transition()
