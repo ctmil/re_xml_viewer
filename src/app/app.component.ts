@@ -39,8 +39,6 @@ export class AppComponent {
   public recursive(s: any, c: any): void {
     console.log('New Structure');
     for (const item of s.getElementsByTagName('ITEM')) {
-      this.contCar++;
-
       let resposta = '';
 
       if (item.getElementsByTagName('CONFIGURADO')[0]) {
@@ -82,6 +80,7 @@ export class AppComponent {
           }
         }
       }
+      this.contCar++;
 
       const nc = {
         name: item.getAttribute('ID'),
@@ -105,6 +104,7 @@ export class AppComponent {
 
     if (xmlDoc.getElementsByTagName('XML_BUILDER')) {
       const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
+      let print = false;
 
       for (const item of items) {
         if (item.getElementsByTagName('CONFIGURADO')[0]) {
@@ -147,11 +147,12 @@ export class AppComponent {
               resposta += '<b>DESCRIPCIONCOMPLETA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             }
           }
+
           const childs = {
-              name: item.getAttribute('ID'),
-              parent: 'ROOT',
-              children: [],
-              resposta
+            name: item.getAttribute('ID'),
+            parent: 'ROOT',
+            children: [],
+            resposta
           };
 
           this.children.push(childs);
