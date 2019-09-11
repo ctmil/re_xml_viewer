@@ -87,12 +87,12 @@ export class AppComponent {
       const nc = {
         name: item.getAttribute('ID'),
         parent: s.parentNode.getAttribute('ID'),
-        children: [],
+        _children: [],
         resposta,
         entidad
       };
 
-      c.children.push(nc);
+      c._children.push(nc);
 
       if (item.getElementsByTagName('ESTRUTURA')) {
         this.recursive(item.getElementsByTagName('ESTRUTURA')[0], nc);
@@ -155,7 +155,7 @@ export class AppComponent {
           const childs = {
               name: item.getAttribute('ID'),
               parent: 'ROOT',
-              children: [],
+              _children: [],
               resposta,
               entidad
           };
