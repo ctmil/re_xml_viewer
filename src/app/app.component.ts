@@ -41,6 +41,8 @@ export class AppComponent {
     for (const item of s.getElementsByTagName('ITEM')) {
       let resposta = '';
       let entidad = '';
+      let nameF = '';
+      let hasCode = false;
 
       if (item.getElementsByTagName('CONFIGURADO')[0]) {
         const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
@@ -80,12 +82,31 @@ export class AppComponent {
           } else if (carac.getAttribute('CODIGO') === 'DESCRIPCIONCOMPLETA') {
             resposta += '<b>DESCRIPCIONCOMPLETA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           }
+
+          if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
+            if (carac.getAttribute('RESPOSTA') === 'PT' || carac.getAttribute('RESPOSTA') === 'INS'
+             || carac.getAttribute('RESPOSTA') === 'SE') {
+               if (item.getAttribute('DESENHO')) {
+                nameF = item.getAttribute('DESENHO');
+               } else {
+                nameF = item.getAttribute('ITEM_BASE');
+               }
+               hasCode = true;
+            } else {
+              nameF = item.getAttribute('ID');
+            }
+          }
+
         }
       }
       this.contCar++;
 
+      if (hasCode === false) {
+        nameF = item.getAttribute('ID');
+      }
+
       const nc = {
-        name: item.getAttribute('ID'),
+        name: nameF,
         parent: s.parentNode.getAttribute('ID'),
         _children: [],
         resposta,
@@ -115,6 +136,7 @@ export class AppComponent {
 
           let resposta = '';
           let entidad = '';
+          let nameF = '';
           for (const carac of caracs) {
             if (carac.getAttribute('CODIGO') === 'CODIGOAMBIENTEDEFAULT') {
               resposta += '<b>CODIGOAMBIENTEDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
@@ -150,10 +172,23 @@ export class AppComponent {
             } else if (carac.getAttribute('CODIGO') === 'DESCRIPCIONCOMPLETA') {
               resposta += '<b>DESCRIPCIONCOMPLETA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             }
+
+            if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
+              if (carac.getAttribute('RESPOSTA') === 'PT' || carac.getAttribute('RESPOSTA') === 'INS'
+               || carac.getAttribute('RESPOSTA') === 'SE') {
+                 if (item.getAttribute('DESENHO')) {
+                  nameF = item.getAttribute('DESENHO');
+                 } else {
+                  nameF = item.getAttribute('ITEM_BASE');
+                 }
+              } else {
+                nameF = item.getAttribute('ID');
+              }
+            }
           }
 
           const childs = {
-              name: item.getAttribute('ID'),
+              name: nameF,
               parent: 'ROOT',
               _children: [],
               resposta,
@@ -179,7 +214,7 @@ export class AppComponent {
             children: this.children
           }
         ];
-        this.drawGraph(this.contCar * 34);
+        this.drawGraph(this.contCar * 8);
       }, 1000);
     } else {
       alert('XML Inválido - Consulte al Administrador');
@@ -221,7 +256,7 @@ export class AppComponent {
       const links = tree.links(nodes);
 
       // Normalize for fixed-depth.
-      nodes.forEach((d: any) => { d.y = d.depth * 200; });
+      nodes.forEach((d: any) => { d.y = d.depth * 350; });
 
       // Update the nodes…
       const node = svg.selectAll('g.node')
@@ -270,16 +305,16 @@ export class AppComponent {
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeUpdate.select('text')
-      .style('font', '12px sans-serif')
+      .style('font', '14px sans-serif')
       .style('fill-opacity', (d: any) => {
         if (d.entidad) {
           if (d.entidad === 'PT' || d.entidad === 'SE' || d.entidad === 'INS') {
             return 1;
           } else {
-            return 0.6;
+            return 0.7;
           }
         } else {
-          return 0.6;
+          return 0.7;
         }
       });
 
