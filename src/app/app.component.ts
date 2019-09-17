@@ -38,7 +38,7 @@ export class AppComponent {
 
   public recursive(s: any, c: any): void {
     console.log('New Structure');
-    for (const item of s.getElementsByTagName('ITEM')) {
+    for (const item of s.children) {
       let resposta = '';
       let entidad = '';
       let nameF = '';
@@ -127,7 +127,8 @@ export class AppComponent {
     const xmlDoc = parser.parseFromString(file, 'text/xml');
 
     if (xmlDoc.getElementsByTagName('XML_BUILDER')) {
-      const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
+      console.log('---------------------------------------------/////////////////////////////////////////////////////');
+      const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].children;
 
       for (const item of items) {
         if (item.getElementsByTagName('CONFIGURADO')[0]) {
@@ -214,7 +215,7 @@ export class AppComponent {
             children: this.children
           }
         ];
-        this.drawGraph(this.contCar * 8);
+        this.drawGraph(this.contCar * 18);
       }, 1000);
     } else {
       alert('XML Inválido - Consulte al Administrador');
@@ -256,7 +257,7 @@ export class AppComponent {
       const links = tree.links(nodes);
 
       // Normalize for fixed-depth.
-      nodes.forEach((d: any) => { d.y = d.depth * 350; });
+      nodes.forEach((d: any) => { d.y = d.depth * 250; });
 
       // Update the nodes…
       const node = svg.selectAll('g.node')
