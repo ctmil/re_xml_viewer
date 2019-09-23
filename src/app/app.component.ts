@@ -38,9 +38,11 @@ export class AppComponent {
 
   public recursive(s: any, c: any): void {
     console.log('New Structure');
-    for (const item of s.getElementsByTagName('ITEM')) {
+    for (const item of s.children) {
       let resposta = '';
       let entidad = '';
+      let nameF = '';
+      let hasCode = false;
 
       if (item.getElementsByTagName('CONFIGURADO')[0]) {
         const caracs = item.getElementsByTagName('CONFIGURADO')[0].getElementsByTagName('CARACTERISTICA');
@@ -80,19 +82,38 @@ export class AppComponent {
           } else if (carac.getAttribute('CODIGO') === 'DESCRIPCIONCOMPLETA') {
             resposta += '<b>DESCRIPCIONCOMPLETA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
           }
+
+          if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
+            if (carac.getAttribute('RESPOSTA') === 'PT' || carac.getAttribute('RESPOSTA') === 'INS'
+             || carac.getAttribute('RESPOSTA') === 'SE') {
+               if (item.getAttribute('DESENHO')) {
+                nameF = item.getAttribute('DESENHO');
+               } else {
+                nameF = item.getAttribute('ITEM_BASE');
+               }
+               hasCode = true;
+            } else {
+              nameF = item.getAttribute('ID');
+            }
+          }
+
         }
       }
       this.contCar++;
 
+      if (hasCode === false) {
+        nameF = item.getAttribute('ID');
+      }
+
       const nc = {
-        name: item.getAttribute('ID'),
+        name: nameF,
         parent: s.parentNode.getAttribute('ID'),
-        children: [],
+        _children: [],
         resposta,
         entidad
       };
 
-      c.children.push(nc);
+      c._children.push(nc);
 
       if (item.getElementsByTagName('ESTRUTURA')) {
         this.recursive(item.getElementsByTagName('ESTRUTURA')[0], nc);
@@ -106,7 +127,8 @@ export class AppComponent {
     const xmlDoc = parser.parseFromString(file, 'text/xml');
 
     if (xmlDoc.getElementsByTagName('XML_BUILDER')) {
-      const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].getElementsByTagName('ITEM');
+      console.log('---------------------------------------------/////////////////////////////////////////////////////');
+      const items = xmlDoc.getElementsByTagName('IMPORTACAO')[0].getElementsByTagName('ITENS_PEDIDO')[0].children;
 
       for (const item of items) {
         if (item.getElementsByTagName('CONFIGURADO')[0]) {
@@ -115,6 +137,7 @@ export class AppComponent {
 
           let resposta = '';
           let entidad = '';
+          let nameF = '';
           for (const carac of caracs) {
             if (carac.getAttribute('CODIGO') === 'CODIGOAMBIENTEDEFAULT') {
               resposta += '<b>CODIGOAMBIENTEDEFAULT:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
@@ -150,12 +173,25 @@ export class AppComponent {
             } else if (carac.getAttribute('CODIGO') === 'DESCRIPCIONCOMPLETA') {
               resposta += '<b>DESCRIPCIONCOMPLETA:</b> ' + carac.getAttribute('RESPOSTA') + '\n';
             }
+
+            if (carac.getAttribute('CODIGO') === 'CODIGOTIPOENTIDAD') {
+              if (carac.getAttribute('RESPOSTA') === 'PT' || carac.getAttribute('RESPOSTA') === 'INS'
+               || carac.getAttribute('RESPOSTA') === 'SE') {
+                 if (item.getAttribute('DESENHO')) {
+                  nameF = item.getAttribute('DESENHO');
+                 } else {
+                  nameF = item.getAttribute('ITEM_BASE');
+                 }
+              } else {
+                nameF = item.getAttribute('ID');
+              }
+            }
           }
 
           const childs = {
-              name: item.getAttribute('ID'),
+              name: nameF,
               parent: 'ROOT',
-              children: [],
+              _children: [],
               resposta,
               entidad
           };
@@ -180,7 +216,7 @@ export class AppComponent {
 	    entidad: 'PT'
           }
         ];
-        this.drawGraph(this.contCar * 34);
+        this.drawGraph(this.contCar * 18);
       }, 1000);
     } else {
       alert('XML Inválido - Consulte al Administrador');
@@ -222,10 +258,8 @@ export class AppComponent {
       const links = tree.links(nodes);
 
       // Normalize for fixed-depth.
-      nodes.forEach((d: any) => {
-	d.y = d.depth * 200; 
-      });
 
+      nodes.forEach((d: any) => { d.y = d.depth * 250; });
 
       // Update the nodes…
       const node = svg.selectAll('g.node')
@@ -274,16 +308,16 @@ export class AppComponent {
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeUpdate.select('text')
-      .style('font', '12px sans-serif')
+      .style('font', '14px sans-serif')
       .style('fill-opacity', (d: any) => {
         if (d.entidad) {
           if (d.entidad === 'PT' || d.entidad === 'SE' || d.entidad === 'INS') {
             return 1;
           } else {
-            return 0.6;
+            return 0.7;
           }
         } else {
-          return 0.6;
+          return 0.7;
         }
       });
 
