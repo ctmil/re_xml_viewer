@@ -225,16 +225,16 @@ export class AppComponent {
 
   public drawGraph(h: number): void {
     // ************** Generate the tree diagram	 *****************
-    const margin = {top: 40, right: 120, bottom: 20, left: 120};
+    const margin = {top: 40, right: 0, bottom: 20, left: 0};
     const width = (window.innerWidth - 20) - margin.right - margin.left;
     const height = h - margin.top - margin.bottom;
 
     let i = 0;
-    const duration = 750;
+    const duration = 1;
 
     const tree = d3.layout.tree().size([height, width]);
 
-    const diagonal = d3.svg.diagonal().projection((d: any) => [d.y, d.x]);
+    const diagonal = d3.svg.diagonal().projection((d: any) => [d.x, d.y]);
 
     d3.select('#d3graph').html('');
 
@@ -250,16 +250,20 @@ export class AppComponent {
 
     update(root);
 
-    d3.select(self.frameElement).style('height', String(h) + 'px');
+    d3.select(self.frameElement).style();
 
     function update(source: any) {
       // Compute the new tree layout.
-      const nodes = tree.nodes(root).reverse();
+      const nodes = tree.nodes(root);
       const links = tree.links(nodes);
+
+      console.log(nodes);
 
       // Normalize for fixed-depth.
 
-      nodes.forEach((d: any) => { d.y = d.depth * 250; });
+      nodes.forEach((d: any, i) => {
+        d.y = d.depth * 100;
+      });
 
       // Update the nodes…
       const node = svg.selectAll('g.node')
@@ -268,9 +272,15 @@ export class AppComponent {
       // Enter any new nodes at the parent's previous position.
       const nodeEnter = node.enter().append('g')
       .attr('class', 'node')
-      .attr('transform', (d: any) => 'translate(' + source.y0 + ',' + source.x0 + ')')
+      .attr('transform', (d: any) => 'translate(' + source.x0 + ',' + source.y0 + ')')
       .on('contextmenu', oclick)
       .on('click', click);
+
+
+      // Transition nodes to their new position.
+      const nodeUpdate = node.transition()
+      .duration(duration)
+      .attr('transform', (d: any) => 'translate(' + d.x + ',' + d.y + ')');
 
       nodeEnter.append('rect')
       .attr('width', 20)
@@ -278,22 +288,17 @@ export class AppComponent {
       .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
 
       nodeEnter.append('text')
-      .attr('x', (d: any) => d.children || d._children ? -13 : 13)
+      .attr('x', (d: any) => d.children || d._children ? 10 : 10)
       .attr('dy', '.35em')
-      .attr('text-anchor', (d: any) => d.children || d._children ? 'end' : 'start')
+      .attr('text-anchor', (d: any) => d.children || d._children ? 'start' : 'start')
       .text((d: any) => d.name)
       .style('fill-opacity', 1e-6);
 
-      // Transition nodes to their new position.
-      const nodeUpdate = node.transition()
-      .duration(duration)
-      .attr('transform', (d: any) => 'translate(' + d.y + ',' + d.x + ')');
-
       nodeUpdate.select('rect')
-      .attr('width', 20)
-      .attr('height', 20)
-      .attr('x', -10)
-      .attr('y', -10)
+      .attr('width', 14)
+      .attr('height', 14)
+      .attr('x', -7)
+      .attr('y', -7)
       .style('stroke', (d: any) => {
         if (d.entidad) {
           if (d.entidad === 'PT' || d.entidad === 'SE' || d.entidad === 'INS') {
@@ -305,10 +310,20 @@ export class AppComponent {
           return 'rgba(0, 0, 255, 0.5)';
         }
       })
-      .style('fill', (d: any) => d._children ? 'salmon' : '#fff');
+      .style('fill', (d: any) => {
+	if (d._children) {
+		if (d.entidad === 'PT' || d.entidad === 'SE' || d.entidad === 'INS') {
+			return 'salmon';
+                } else {
+                        return 'rgba(0, 0, 255, 0.5)';
+                }
+	} else {
+		return '#fff';
+	}
+      });
 
       nodeUpdate.select('text')
-      .style('font', '14px sans-serif')
+      .style('font', '11px sans-serif')
       .style('fill-opacity', (d: any) => {
         if (d.entidad) {
           if (d.entidad === 'PT' || d.entidad === 'SE' || d.entidad === 'INS') {
@@ -324,44 +339,71 @@ export class AppComponent {
       // Transition exiting nodes to the parent's new position.
       const nodeExit = node.exit().transition()
       .duration(duration)
-      .attr('transform', (d: any) => 'translate(' + source.y + ',' + source.x + ')')
+      .attr('transform', (d: any) => 'translate(' + source.x + ',' + source.y + ')')
       .remove();
 
       nodeExit.select('rect')
-      .attr('width', 20)
-      .attr('height', 20);
+      .attr('width', 14)
+      .attr('height', 14);
 
       nodeExit.select('text')
       .style('fill-opacity', 1e-6);
 
-      // Update the links…
-      const link = svg.selectAll('path.link')
+	// Update the links…
+      const link = svg.selectAll('.link')
       .data(links, (d: any) => d.target.id);
 
       // Enter any new links at the parent's previous position.
-      link.enter().insert('path', 'g')
+      link.enter().insert('line')
       .attr('class', 'link')
       .style('fill', 'none')
       .style('stroke', '#ccc')
       .style('stroke-width', '2px')
-      .attr('d', (d: any) => {
-        const o = {x: source.x0, y: source.y0};
-        return diagonal({source: o, target: o});
-      });
+      .attr("x1", function (d){
+          return d.source.x;
+       })
+       .attr("y1", function (d){
+          return d.source.y + 7;
+       })
+       .attr("x2", function (d){
+          return d.target.x;
+       })
+       .attr("y2", function (d){
+          return d.target.y - 7;
+       });
 
       // Transition links to their new position.
       link.transition()
       .duration(duration)
-      .attr('d', diagonal);
+      .attr("x1", function (d){
+          return d.source.x;
+       })
+       .attr("y1", function (d){
+          return d.source.y + 7;
+       })
+       .attr("x2", function (d){
+          return d.target.x;
+       })
+       .attr("y2", function (d){
+          return d.target.y - 7;
+       });
 
       // Transition exiting nodes to the parent's new position.
       link.exit().transition()
       .duration(duration)
-      .attr('d', (d: any) => {
-        const o = {x: source.x, y: source.y};
-        return diagonal({source: o, target: o});
-      })
-      .remove();
+      .attr("x1", function (d){
+          return d.source.x;
+       })
+       .attr("y1", function (d){
+          return d.source.y + 7;
+       })
+       .attr("x2", function (d){
+          return d.target.x;
+       })
+       .attr("y2", function (d){
+          return d.target.y - 7;
+       })
+       .remove();
 
       // Stash the old positions for transition.
       nodes.forEach((d: any) => {
