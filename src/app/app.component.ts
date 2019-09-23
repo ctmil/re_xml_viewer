@@ -176,7 +176,8 @@ export class AppComponent {
           {
             name: 'ROOT',
             parent: 'null',
-            children: this.children
+            children: this.children,
+	    entidad: 'PT'
           }
         ];
         this.drawGraph(this.contCar * 34);
@@ -221,7 +222,10 @@ export class AppComponent {
       const links = tree.links(nodes);
 
       // Normalize for fixed-depth.
-      nodes.forEach((d: any) => { d.y = d.depth * 200; });
+      nodes.forEach((d: any) => {
+	d.y = d.depth * 200; 
+      });
+
 
       // Update the nodes…
       const node = svg.selectAll('g.node')
